@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { @apply border-gray-200; }
+  body { @apply bg-gray-50 text-gray-900 font-sans antialiased; }
+}
+
+@layer components {
+  .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-cmc-teal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cmc-teal-dark disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-dark { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-cmc-navy px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cmc-navy-light; }
+  .btn-secondary { @apply inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50; }
+  .btn-danger { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-cmc-crimson px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700; }
+  .card { @apply rounded-xl border border-gray-100 bg-white p-5 shadow-sm; }
+  .input { @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none transition placeholder:text-gray-400 focus:border-cmc-teal focus:ring-2 focus:ring-cmc-teal/20; }
+  .label { @apply mb-1.5 block text-sm font-semibold text-gray-700; }
+  .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold; }
+  .section-title { @apply text-xl font-bold text-cmc-navy; }
+}
