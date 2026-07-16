@@ -351,20 +351,11 @@ Cette étape valide définitivement la base technique.
 
 ### Étape 11 — Développer l’authentification
 
-La prochaine grande fonctionnalité sera l’authentification.
+Dans cette étape, nous avons commencé à mettre en place la vraie authentification du projet. Nous avons ajouté les dépendances nécessaires pour sécuriser les mots de passe et créer des tokens JWT, puis créé la configuration de sécurité, les schémas d’inscription et de connexion, le service d’authentification, les routes protégées et la séparation entre les rôles CANDIDATE et ADMIN. Nous avons aussi préparé l’inscription d’un candidat avec création automatique de son CandidateProfile, la connexion avec email et mot de passe, la route /me pour récupérer l’utilisateur connecté, ainsi que les contrôles d’accès candidat et administration.
 
-Elle comprendra :
+Pendant les tests, nous avons corrigé plusieurs problèmes : dépendance PyJWT manquante, fichiers dependencies.py et auth_service.py incomplets, ancienne version de FastAPI provoquant un problème avec les routeurs, puis un échec de connexion à PostgreSQL. La dernière erreur venait du fait que Docker Desktop n’était pas démarré, donc PostgreSQL ne pouvait pas fonctionner.
 
-* inscription d’un candidat ;
-* choix entre stagiaire et lauréat ;
-* chiffrement du mot de passe ;
-* connexion ;
-* génération d’un token JWT ;
-* récupération de l’utilisateur connecté ;
-* protection des routes ;
-* séparation entre les routes candidat et administration.
-
-Les administrateurs ne pourront pas s’inscrire publiquement. Ils seront créés par un script sécurisé.
+À ce stade, le code d’authentification est presque prêt. Il reste maintenant à démarrer Docker Desktop, relancer PostgreSQL, appliquer les migrations si nécessaire, créer un candidat de test, tester le login JWT, puis créer et tester un compte administrateur.
 
 ---
 
