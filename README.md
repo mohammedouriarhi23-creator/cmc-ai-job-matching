@@ -312,23 +312,6 @@ Les fichiers suivants ne sont pas envoyés sur GitHub :
 
 ---
 
-## Où sommes-nous actuellement ?
-
-Nous avons actuellement terminé la **fondation technique du projet**.
-
-Les éléments déjà disponibles sont :
-
-* le concept fonctionnel du projet ;
-* le frontend de démonstration ;
-* la structure du backend FastAPI ;
-* la configuration PostgreSQL ;
-* la connexion SQLAlchemy ;
-* les premiers modèles de données ;
-* la configuration Alembic ;
-* la première migration ;
-* l’intégration du frontend et du backend dans le même dépôt GitHub.
-
-Le matching, l’authentification, l’analyse réelle des CV et les candidatures ne sont pas encore développés.
 
 ---
 
