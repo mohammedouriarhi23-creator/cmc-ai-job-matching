@@ -332,7 +332,6 @@ Le matching, l’authentification, l’analyse réelle des CV et les candidature
 
 ---
 
-# Prochaines étapes
 
 ### Étape 10 — Vérifier et appliquer la première migration
 
@@ -358,6 +357,12 @@ Pendant les tests, nous avons corrigé plusieurs problèmes : dépendance PyJWT 
 À ce stade, le code d’authentification est presque prêt. Il reste maintenant à démarrer Docker Desktop, relancer PostgreSQL, appliquer les migrations si nécessaire, créer un candidat de test, tester le login JWT, puis créer et tester un compte administrateur.
 
 ---
+
+
+# Prochaines étapes   
+
+
+# on est arrivé ici
 
 ### Étape 12 — Connecter l’authentification au frontend
 
