@@ -342,105 +342,76 @@ Pendant les tests, nous avons corrigé plusieurs problèmes : dépendance PyJWT 
 ---
 
 
-# Prochaines étapes   
+# Prochaines étapes
 
+### Étape 12 — Connecter l'authentification au frontend ✅
+
+Les boutons et utilisateurs fictifs du frontend ont été remplacés par une vraie authentification :
+
+* vrai formulaire de connexion (`/connexion`) qui appelle `POST /api/auth/login` (OAuth2 form) ;
+* vraie inscription qui appelle `POST /api/auth/register` puis connecte automatiquement le candidat ;
+* token JWT stocké côté client, session restaurée au rechargement de page via `GET /api/auth/me` (avant, un simple F5 déconnectait l'utilisateur) ;
+* redirection selon le rôle réel renvoyé par le backend : candidat stagiaire → `/dashboard/stagiaire`, candidat lauréat → `/dashboard/laureat`, admin → `/admin` (page minimale, l'espace administration complet reste à construire — voir Étape 21) ;
+* pages protégées par rôle réel (`CANDIDATE`/`ADMIN`) au lieu d'un faux statut local ;
+* le faux statut "compte en attente de validation" a été retiré : le backend active les comptes immédiatement, il n'y a pas encore de workflow de validation admin (à décider plus tard si on en a besoin).
+
+**Changement de scope important par rapport au plan initial :** le formulaire d'inscription a été transformé en **wizard multi-étapes** (`FormWizard`, composant générique piloté par une config — `frontend-mock/src/data/wizard/stagiaireSteps.js` / `laureatSteps.js`) au lieu d'un simple formulaire une page. 6 étapes par profil (Identité, Formation, Stage recherché/Situation, Compétences, Parcours, Documents & Profil), avec stepper visuel, validation par étape, et sauvegarde en `localStorage` pour ne pas perdre la saisie au rechargement.
+
+Seuls email / mot de passe / nom / prénom / téléphone / type (stagiaire ou lauréat) partent réellement vers le backend aujourd'hui — voir Étape 16 pour ce qui manque encore côté persistance.
+
+---
+
+### Étape 13 — Développer le dépôt du CV ✅ (approche différente du plan initial)
+
+Le candidat peut déposer un CV (PDF, JPG ou PNG) directement à l'**étape 1** du wizard d'inscription, avant même la création du compte.
+
+Contrairement au plan initial, le fichier **n'est jamais enregistré sur le serveur** : il est lu en mémoire, envoyé à l'IA, puis oublié dès la fin de la requête. Il n'y a donc pas de table `cv_extractions` utilisée pour l'instant — cette route est volontairement "stateless" pour l'instant (à revoir si on veut un jour garder un historique des CV déposés).
+
+Validations faites côté backend avant tout traitement : format (PDF/JPG/PNG), taille (5 Mo max), nombre de pages PDF (10 max).
+
+---
+
+### Étape 14 — Développer l'analyse IA du CV ✅ (Gemini au lieu du pipeline initialement prévu)
+
+Le fichier du CV est envoyé directement à **Google Gemini** (`gemini-2.5-flash`, encodage base64) plutôt que d'extraire le texte localement puis de l'envoyer à un modèle — cette approche permet aussi de traiter les CV scannés/images, pas seulement les PDF avec texte natif.
+
+L'IA renvoie une structure JSON qui reprend les mêmes noms de champs que le wizard (identité, formation, compétences techniques, langues, soft skills, expériences, projets, certifications, présentation), avec pour chaque champ une `value` et un niveau de confiance (`high`/`medium`/`low`), afin que le candidat sache quoi vérifier en priorité.
+
+Le statut `PENDING_CONFIRMATION` prévu initialement n'existe pas en base : comme le fichier n'est pas persisté (Étape 13), il n'y a rien à "confirmer" côté serveur — la confirmation se fait entièrement côté frontend (voir Étape 15).
+
+Route : `POST /api/cv/parse` (`backend/app/routers/cv.py`, `backend/app/services/cv_extraction_service.py`). Protections : timeout 60 s avec 1 nouvel essai si la réponse IA n'est pas un JSON valide, limite de 3 analyses par IP toutes les 10 minutes, aucun contenu de CV n'est jamais écrit dans les logs (RGPD). Si `GEMINI_API_KEY` n'est pas configurée, la route répond clairement (503) plutôt que de planter.
+
+---
+
+### Étape 15 — Développer la validation du CV ✅ (côté frontend uniquement)
+
+Après extraction, une fenêtre de revue (`CvReviewModal`) affiche les informations détectées, groupées par section, avec un badge de confiance par champ.
+
+Le candidat peut :
+
+* accepter ou refuser chaque champ individuellement (case à cocher) ;
+* tout accepter ou tout ignorer en un clic ;
+* voir la liste des informations non détectées dans son CV.
+
+Règles d'injection respectées (`frontend-mock/src/data/wizard/cvToFormMapper.js`, testé unitairement) :
+
+* un champ déjà rempli manuellement n'est **jamais** écrasé automatiquement ;
+* les listes (compétences, langues, expériences...) sont fusionnées sans doublons (comparaison insensible à la casse et aux accents) ;
+* un badge "extrait du CV" reste affiché à côté d'un champ pré-rempli tant que le candidat ne l'a pas modifié lui-même.
+
+Cette validation se fait uniquement pendant l'inscription (avant la création du compte) — ce n'est pas un flux séparé consultable plus tard, contrairement à ce qui était envisagé au départ.
+
+---
+
+### Étape 16 — Compléter les modèles du candidat ⚠️ collecté côté frontend, **pas encore sauvegardé en base**
+
+Le wizard d'inscription collecte déjà toutes les informations prévues à cette étape : compétences techniques, soft skills, langues, expériences, projets, certifications, filière CMC, niveau, année de formation/obtention, disponibilité, mobilité, type d'opportunité recherché, mode de travail préféré, etc.
+
+**Ce qui manque réellement :** aucune de ces données n'est encore envoyée ni sauvegardée côté backend. Seuls email / mot de passe / nom / prénom / téléphone / type de candidat sont persistés aujourd'hui (modèle `CandidateProfile` existant, inchangé depuis l'Étape 7). Le reste vit uniquement dans l'état local du navigateur (React) et est perdu si le candidat vide son cache ou change d'appareil.
 
 # on est arrivé ici
 
-### Étape 12 — Connecter l’authentification au frontend
-
-Les boutons et utilisateurs fictifs du frontend seront remplacés par :
-
-* un vrai formulaire d’inscription ;
-* un vrai formulaire de connexion ;
-* une redirection selon le rôle ;
-* une gestion réelle de la session ;
-* une protection des pages.
-
-Un candidat sera redirigé vers l’espace candidat.
-
-Un administrateur sera redirigé vers l’espace administration.
-
----
-
-### Étape 13 — Développer le dépôt du CV
-
-Le candidat pourra déposer un CV au format PDF.
-
-Le backend devra :
-
-* vérifier le format du fichier ;
-* limiter la taille du fichier ;
-* enregistrer le CV ;
-* créer une extraction en base ;
-* extraire le texte du PDF ;
-* gérer les erreurs.
-
-À cette étape, aucune donnée ne sera encore ajoutée automatiquement au profil définitif.
-
----
-
-### Étape 14 — Développer l’analyse IA du CV
-
-Le texte du CV sera envoyé à un service d’intelligence artificielle.
-
-L’IA devra produire une structure commune contenant :
-
-* résumé professionnel ;
-* compétences ;
-* expériences ;
-* projets ;
-* formations ;
-* langues ;
-* certifications.
-
-Le résultat sera enregistré temporairement avec le statut :
-
-```text
-PENDING_CONFIRMATION
-```
-
----
-
-### Étape 15 — Développer la validation du CV
-
-Le frontend affichera les informations détectées.
-
-Le candidat pourra :
-
-* corriger une information ;
-* supprimer une information ;
-* ajouter une information ;
-* confirmer le résultat.
-
-Les informations ne seront ajoutées au profil définitif qu’après cette confirmation.
-
----
-
-### Étape 16 — Compléter les modèles du candidat
-
-De nouvelles tables seront créées pour gérer :
-
-* les compétences ;
-* les expériences ;
-* les projets ;
-* les formations ;
-* les langues ;
-* les certifications ;
-* les préférences professionnelles.
-
-Le candidat remplira également les informations qui ne sont généralement pas présentes dans le CV :
-
-* filière CMC ;
-* niveau de formation ;
-* année d’étude ;
-* année de diplomation ;
-* disponibilité ;
-* mobilité ;
-* villes souhaitées ;
-* domaines recherchés ;
-* type d’opportunité ;
-* mode de travail préféré.
+La prochaine étape concrète est donc de **créer les tables/modèles SQLAlchemy + migrations Alembic + routes API** pour que tout ce que le wizard collecte (compétences, expériences, projets, formations, langues, certifications, préférences) soit réellement sauvegardé, au lieu de rester uniquement dans le navigateur.
 
 ---
 

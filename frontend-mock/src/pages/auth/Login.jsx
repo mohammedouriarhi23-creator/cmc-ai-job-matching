@@ -4,12 +4,15 @@ import { LogIn } from "lucide-react"
 import Card from "../../components/ui/Card"
 import Input from "../../components/ui/Input"
 import Button from "../../components/ui/Button"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth, dashboardPathFor } from "../../context/AuthContext"
+import { ApiError } from "../../lib/api"
 
 export default function Login() {
   const [searchParams] = useSearchParams()
   const profil = searchParams.get("profil") === "laureat" ? "laureat" : "stagiaire"
   const [form, setForm] = useState({ email: "", motDePasse: "" })
+  const [error, setError] = useState("")
+  const [submitting, setSubmitting] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
 
@@ -17,10 +20,22 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    login({ email: form.email || "utilisateur@exemple.com", profil })
-    navigate(profil === "laureat" ? "/dashboard/laureat" : "/dashboard/stagiaire")
+    setError("")
+    setSubmitting(true)
+    try {
+      const user = await login(form.email, form.motDePasse)
+      navigate(dashboardPathFor(user))
+    } catch (err) {
+      setError(
+        err instanceof ApiError && err.status === 401
+          ? "Email ou mot de passe incorrect."
+          : "Impossible de se connecter pour le moment. Réessayez."
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -37,6 +52,11 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {error && (
+            <p className="rounded-lg bg-[#fdecee] px-3.5 py-2.5 text-sm font-medium text-[#bc0001]">
+              {error}
+            </p>
+          )}
           <Input
             label="Email"
             id="email"
@@ -57,8 +77,8 @@ export default function Login() {
             onChange={handleChange}
             placeholder="••••••••"
           />
-          <Button type="submit" variant="primary" className="mt-2 w-full">
-            Se connecter
+          <Button type="submit" variant="primary" className="mt-2 w-full" disabled={submitting}>
+            {submitting ? "Connexion..." : "Se connecter"}
           </Button>
         </form>
 
@@ -67,10 +87,6 @@ export default function Login() {
           <Link to={`/inscription/${profil}`} className="font-semibold text-[#3dabc4] hover:underline">
             Créer un compte {profil === "laureat" ? "lauréat" : "stagiaire"}
           </Link>
-        </p>
-        <p className="mt-2 text-center text-xs text-gray-400">
-          Ceci est une démonstration : toute connexion est simulée, aucune vérification réelle
-          n'est effectuée.
         </p>
       </Card>
     </div>

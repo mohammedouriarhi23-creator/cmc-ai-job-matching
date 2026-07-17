@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom"
 import { Menu, X, LogOut, LayoutDashboard } from "lucide-react"
 import Logo from "../ui/Logo"
 import Button from "../ui/Button"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth, dashboardPathFor } from "../../context/AuthContext"
 
 const navLinks = [
   { to: "/", label: "Accueil" },
@@ -103,7 +103,7 @@ export default function Navbar() {
           {user ? (
             <>
               <Button
-                to={user.profil === "laureat" ? "/dashboard/laureat" : "/dashboard/stagiaire"}
+                to={dashboardPathFor(user)}
                 variant={transparent ? "outline-white" : "outline"}
                 size="sm"
               >
@@ -163,7 +163,7 @@ export default function Navbar() {
             {user ? (
               <>
                 <Button
-                  to={user.profil === "laureat" ? "/dashboard/laureat" : "/dashboard/stagiaire"}
+                  to={dashboardPathFor(user)}
                   variant="outline"
                   onClick={() => setOpen(false)}
                 >

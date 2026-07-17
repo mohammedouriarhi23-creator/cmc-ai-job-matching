@@ -24,7 +24,7 @@ import Faq from "./pages/public/Faq"
 import EspaceCandidat from "./pages/auth/EspaceCandidat"
 import Login from "./pages/auth/Login"
 import Register from "./pages/auth/Register"
-import CompteEnAttente from "./pages/auth/CompteEnAttente"
+import AdminDashboard from "./pages/admin/AdminDashboard"
 
 import StagiaireProfil from "./pages/dashboard/stagiaire/MonProfil"
 import StagiaireCV from "./pages/dashboard/stagiaire/MonCV"
@@ -74,12 +74,20 @@ export default function App() {
           </Route>
 
           <Route path="/espace-candidat" element={<EspaceCandidat />} />
-          <Route path="/compte-en-attente" element={<CompteEnAttente />} />
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute role="ADMIN">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/dashboard/stagiaire"
             element={
-              <ProtectedRoute profil="stagiaire">
+              <ProtectedRoute role="CANDIDATE" profil="stagiaire">
                 <DashboardLayout navItems={stagiaireNavItems} title="Espace stagiaire" />
               </ProtectedRoute>
             }
@@ -94,7 +102,7 @@ export default function App() {
           <Route
             path="/dashboard/laureat"
             element={
-              <ProtectedRoute profil="laureat">
+              <ProtectedRoute role="CANDIDATE" profil="laureat">
                 <DashboardLayout navItems={laureatNavItems} title="Espace lauréat" />
               </ProtectedRoute>
             }

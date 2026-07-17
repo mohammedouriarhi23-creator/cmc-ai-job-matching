@@ -1,24 +1,21 @@
 import { Navigate } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
+import { useAuth, dashboardPathFor } from "../context/AuthContext"
 
-export default function ProtectedRoute({ profil, children }) {
-  const { user } = useAuth()
+export default function ProtectedRoute({ role, profil, children }) {
+  const { user, loading } = useAuth()
+
+  if (loading) return null
 
   if (!user) {
     return <Navigate to="/espace-candidat" replace />
   }
 
-  if (user.statut === "en_attente") {
-    return <Navigate to="/compte-en-attente" replace />
+  if (role && user.role !== role) {
+    return <Navigate to={dashboardPathFor(user)} replace />
   }
 
   if (profil && user.profil !== profil) {
-    return (
-      <Navigate
-        to={user.profil === "laureat" ? "/dashboard/laureat" : "/dashboard/stagiaire"}
-        replace
-      />
-    )
+    return <Navigate to={dashboardPathFor(user)} replace />
   }
 
   return children
