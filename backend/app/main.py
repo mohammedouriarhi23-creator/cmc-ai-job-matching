@@ -4,7 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.routers.auth import router as auth_router
 from app.routers.cv import router as cv_router
-
+from app.routers.candidate_profile import (
+    router as candidate_profile_router,
+)
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -20,6 +22,10 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+app.include_router(
+    candidate_profile_router,
+    prefix=settings.API_V1_PREFIX,
 )
 
 app.include_router(

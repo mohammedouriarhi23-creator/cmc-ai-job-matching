@@ -103,3 +103,8 @@ class CandidateProfile(Base):
         back_populates="candidate",
         cascade="all, delete-orphan",
     )
+    complete_profile_data: Mapped["CandidateProfileData | None"] = relationship(
+        back_populates="candidate_profile",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )

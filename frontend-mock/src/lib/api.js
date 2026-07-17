@@ -96,3 +96,16 @@ export const authApi = {
     return request("/auth/me")
   },
 }
+
+export const candidateProfileApi = {
+  save(payload) {
+    return request("/candidate/profile", {
+      method: "PUT",
+      json: payload,
+    })
+  },
+
+  get() {
+    return request("/candidate/profile")
+  },
+}
