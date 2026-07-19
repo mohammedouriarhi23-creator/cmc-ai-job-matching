@@ -1,4 +1,4 @@
-Voici le README complet, prêt à copier-coller :
+
 
 ````markdown
 # CMC AI Job Matching
