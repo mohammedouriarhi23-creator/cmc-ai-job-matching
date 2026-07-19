@@ -163,7 +163,7 @@ export const laureatSteps = [
       }),
     validate: (data) => {
       const errors = collect(
-        ["cv", data.cv ? null : "Le CV est obligatoire."],
+        ["cv", data.cv && !data.cv.stale ? null : "Le CV doit être sélectionné sur cet appareil."],
         [
           "presentation",
           required(data.presentation) ||

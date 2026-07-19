@@ -5,9 +5,24 @@ from sqlalchemy import engine_from_config, pool
 
 from app.core.config import settings
 from app.core.database import Base
-
-# Charge les modèles SQLAlchemy dans Base.metadata
-import app.models  # noqa: F401
+from app.models import (  # noqa: F401
+    Application,
+    CandidateCertification,
+    CandidateDocument,
+    CandidateEducation,
+    CandidateExperience,
+    CandidateLanguage,
+    CandidatePreference,
+    CandidateProfile,
+    CandidateProfileData,
+    CandidateProject,
+    CandidateSkill,
+    CandidateSoftSkill,
+    Company,
+    CvExtraction,
+    JobOffer,
+    User,
+)
 
 
 config = context.config

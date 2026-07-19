@@ -4,7 +4,7 @@ import Card from "../../../components/ui/Card"
 import Input from "../../../components/ui/Input"
 import Select from "../../../components/ui/Select"
 import Button from "../../../components/ui/Button"
-import { useAuth } from "../../../context/AuthContext"
+import { useAuth } from "../../../context/auth"
 import { filieres, niveaux } from "../../../data/filieres"
 
 export default function MonProfil() {
@@ -14,22 +14,32 @@ export default function MonProfil() {
     prenom: user?.prenom || "",
     email: user?.email || "",
     telephone: user?.telephone || "",
+    ville: user?.ville || "",
     filiere: user?.filiere || filieres[0].nom,
-    specialite: user?.specialite || "",
     niveau: user?.niveau || niveaux[1],
     annee: user?.annee || "2025",
   })
   const [saved, setSaved] = useState(false)
+  const [error, setError] = useState("")
+  const [saving, setSaving] = useState(false)
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    updateProfile(form)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    setSaving(true)
+    setError("")
+    try {
+      await updateProfile(form)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2500)
+    } catch (err) {
+      setError(err.message || "Impossible de mettre à jour le profil.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -46,11 +56,13 @@ export default function MonProfil() {
             Profil mis à jour avec succès.
           </div>
         )}
+        {error && <p className="mb-5 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input label="Nom" id="nom" name="nom" value={form.nom} onChange={handleChange} />
           <Input label="Prénom" id="prenom" name="prenom" value={form.prenom} onChange={handleChange} />
           <Input label="Email" id="email" name="email" type="email" value={form.email} onChange={handleChange} />
           <Input label="Téléphone" id="telephone" name="telephone" value={form.telephone} onChange={handleChange} />
+          <Input label="Ville" id="ville" name="ville" value={form.ville} onChange={handleChange} />
           <Select label="Filière" id="filiere" name="filiere" value={form.filiere} onChange={handleChange}>
             {filieres.map((f) => (
               <option key={f.id} value={f.nom}>
@@ -58,13 +70,6 @@ export default function MonProfil() {
               </option>
             ))}
           </Select>
-          <Input
-            label="Spécialité"
-            id="specialite"
-            name="specialite"
-            value={form.specialite}
-            onChange={handleChange}
-          />
           <Select label="Niveau" id="niveau" name="niveau" value={form.niveau} onChange={handleChange}>
             {niveaux.map((n) => (
               <option key={n} value={n}>
@@ -81,9 +86,9 @@ export default function MonProfil() {
           />
 
           <div className="sm:col-span-2">
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={saving}>
               <Save size={16} />
-              Enregistrer les modifications
+              {saving ? "Enregistrement..." : "Enregistrer les modifications"}
             </Button>
           </div>
         </form>

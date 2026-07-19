@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { Menu, LogOut } from "lucide-react"
 import Sidebar from "./Sidebar"
 import Logo from "../ui/Logo"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/auth"
 
 export default function DashboardLayout({ navItems, title }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)

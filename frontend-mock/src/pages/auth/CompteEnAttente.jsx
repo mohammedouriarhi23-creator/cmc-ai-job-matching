@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { Hourglass, CheckCircle2 } from "lucide-react"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/auth"
 import Logo from "../../components/ui/Logo"
 
 export default function CompteEnAttente() {

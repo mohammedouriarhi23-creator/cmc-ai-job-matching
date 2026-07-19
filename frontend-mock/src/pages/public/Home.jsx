@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import {
   Users,
   GraduationCap,
@@ -18,9 +19,8 @@ import OffreCard from "../../components/offres/OffreCard"
 import StatCard from "../../components/home/StatCard"
 import StepCard from "../../components/home/StepCard"
 import CompanyCard from "../../components/home/CompanyCard"
-import { offres } from "../../data/offres"
 import { stats } from "../../data/stats"
-import { entreprises } from "../../data/entreprises"
+import { companyApi, jobOfferApi, mapOffer } from "../../lib/api"
 
 const statIcons = { users: Users, "graduation-cap": GraduationCap, building: Building2, briefcase: Briefcase }
 
@@ -50,8 +50,20 @@ const etapes = [
 ]
 
 export default function Home() {
-  const offresRecentes = offres.slice(0, 6)
-  const offresApercu = offres.slice(0, 3)
+  const [offresRecentes, setOffresRecentes] = useState([])
+  const [entreprises, setEntreprises] = useState([])
+  const offresApercu = offresRecentes.slice(0, 3)
+
+  useEffect(() => {
+    jobOfferApi
+      .list({ page_size: 6 })
+      .then((data) => setOffresRecentes(data.items.map(mapOffer)))
+      .catch(() => setOffresRecentes([]))
+    companyApi
+      .list({ page_size: 20 })
+      .then((data) => setEntreprises(data.items))
+      .catch(() => setEntreprises([]))
+  }, [])
 
   return (
     <div className="overflow-x-hidden">

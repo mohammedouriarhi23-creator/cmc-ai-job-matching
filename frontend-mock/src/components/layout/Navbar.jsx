@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom"
 import { Menu, X, LogOut, LayoutDashboard } from "lucide-react"
 import Logo from "../ui/Logo"
 import Button from "../ui/Button"
-import { useAuth, dashboardPathFor } from "../../context/AuthContext"
+import { useAuth, dashboardPathFor } from "../../context/auth"
 
 const navLinks = [
   { to: "/", label: "Accueil" },

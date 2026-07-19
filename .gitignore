@@ -1,5 +1,7 @@
 backend/venv/
 backend/.env
+backend/.pytest_cache/
+backend/storage/candidate_documents/
 __pycache__/
 *.pyc
 frontend-mock/node_modules/

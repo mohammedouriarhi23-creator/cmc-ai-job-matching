@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { Clock, MapPin, Briefcase, Heart, ArrowRight } from "lucide-react"
-import { joursRestants } from "../../data/offres"
 
 const typeStyles = {
   Stage: { border: "border-t-[#3dabc4]", badge: "bg-[#ebfbff] text-[#257184]" },
@@ -12,7 +11,7 @@ const typeStyles = {
 export default function OffreCard({ offre }) {
   const [favori, setFavori] = useState(false)
   const style = typeStyles[offre.type] || typeStyles.Stage
-  const jours = joursRestants(offre.dateLimite)
+  const jours = offre.dateLimite ? joursRestants(offre.dateLimite) : null
 
   return (
     <div
@@ -24,7 +23,9 @@ export default function OffreCard({ offre }) {
         </span>
         <span className="flex items-center gap-1 text-xs font-medium text-gray-400">
           <Clock size={13} />
-          {jours} jour{jours !== 1 ? "s" : ""} restant{jours !== 1 ? "s" : ""}
+          {jours === null
+            ? "Sans date limite"
+            : `${jours} jour${jours !== 1 ? "s" : ""} restant${jours !== 1 ? "s" : ""}`}
         </span>
       </div>
 
@@ -77,4 +78,9 @@ export default function OffreCard({ offre }) {
       </div>
     </div>
   )
+}
+
+function joursRestants(dateLimite) {
+  const diff = new Date(dateLimite).getTime() - Date.now()
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
 }

@@ -108,3 +108,55 @@ class CandidateProfile(Base):
         uselist=False,
         cascade="all, delete-orphan",
     )
+    applications = relationship(
+        "Application",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )
+    education = relationship(
+        "CandidateEducation",
+        back_populates="candidate_profile",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    skills = relationship(
+        "CandidateSkill",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )
+    languages = relationship(
+        "CandidateLanguage",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )
+    soft_skills = relationship(
+        "CandidateSoftSkill",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )
+    experiences = relationship(
+        "CandidateExperience",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )
+    projects = relationship(
+        "CandidateProject",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )
+    certifications = relationship(
+        "CandidateCertification",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )
+    preference = relationship(
+        "CandidatePreference",
+        back_populates="candidate_profile",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    documents = relationship(
+        "CandidateDocument",
+        back_populates="candidate_profile",
+        cascade="all, delete-orphan",
+    )

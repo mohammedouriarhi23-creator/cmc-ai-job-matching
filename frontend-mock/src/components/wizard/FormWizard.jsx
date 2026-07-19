@@ -1,18 +1,7 @@
 import { useState } from "react"
 import Stepper from "./Stepper"
 import WizardFooter from "./WizardFooter"
-
-function stripFiles(value) {
-  if (Array.isArray(value)) return value.map(stripFiles)
-  if (value && typeof value === "object") {
-    if ("file" in value && "name" in value && "size" in value) {
-      const { file, ...meta } = value
-      return { ...meta, stale: true }
-    }
-    return Object.fromEntries(Object.entries(value).map(([key, val]) => [key, stripFiles(val)]))
-  }
-  return value
-}
+import { sanitizeWizardForStorage } from "../../data/wizard/storage"
 
 function loadPersisted(storageKey, steps) {
   const defaults = Object.fromEntries(steps.map((step) => [step.id, step.initial]))
@@ -23,6 +12,10 @@ function loadPersisted(storageKey, steps) {
     const data = { ...defaults }
     for (const step of steps) {
       data[step.id] = { ...step.initial, ...(parsed.data?.[step.id] || {}) }
+    }
+    if (data.identite) {
+      data.identite.motDePasse = ""
+      data.identite.confirmationMotDePasse = ""
     }
     const stepIndex = Math.min(Math.max(parsed.stepIndex || 0, 0), steps.length - 1)
     return { data, stepIndex, completedSteps: parsed.completedSteps || [] }
@@ -54,7 +47,7 @@ export default function FormWizard({ steps, storageKey, title, onSubmit }) {
       localStorage.setItem(
         storageKey,
         JSON.stringify({
-          data: stripFiles(nextData),
+          data: sanitizeWizardForStorage(nextData),
           stepIndex: nextStepIndex,
           completedSteps: Array.from(nextCompleted),
         })

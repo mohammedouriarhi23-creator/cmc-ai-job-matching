@@ -3,7 +3,7 @@ import WizardLayout from "../../components/wizard/WizardLayout"
 import FormWizard from "../../components/wizard/FormWizard"
 import { stagiaireSteps } from "../../data/wizard/stagiaireSteps"
 import { laureatSteps } from "../../data/wizard/laureatSteps"
-import { useAuth, dashboardPathFor } from "../../context/AuthContext"
+import { useAuth, dashboardPathFor } from "../../context/auth"
 import { ApiError } from "../../lib/api"
 
 export default function Register() {
@@ -20,7 +20,7 @@ export default function Register() {
       navigate(dashboardPathFor(user))
     } catch (err) {
       throw new Error(
-        err instanceof ApiError && err.status === 400
+        err instanceof ApiError && err.status === 409
           ? "Un compte existe déjà avec cet email."
           : "Impossible de créer le compte pour le moment. Réessayez."
       )

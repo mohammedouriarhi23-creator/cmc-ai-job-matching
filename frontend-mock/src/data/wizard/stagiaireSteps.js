@@ -160,7 +160,7 @@ export const stagiaireSteps = [
       }),
     validate: (data) => {
       const errors = collect(
-        ["cv", data.cv ? null : "Le CV est obligatoire."],
+        ["cv", data.cv && !data.cv.stale ? null : "Le CV doit être sélectionné sur cet appareil."],
         [
           "presentation",
           data.presentation && (data.presentation.length < 500 || data.presentation.length > 1000)

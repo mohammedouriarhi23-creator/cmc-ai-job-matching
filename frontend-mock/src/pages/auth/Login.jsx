@@ -4,7 +4,7 @@ import { LogIn } from "lucide-react"
 import Card from "../../components/ui/Card"
 import Input from "../../components/ui/Input"
 import Button from "../../components/ui/Button"
-import { useAuth, dashboardPathFor } from "../../context/AuthContext"
+import { useAuth, dashboardPathFor } from "../../context/auth"
 import { ApiError } from "../../lib/api"
 
 export default function Login() {
