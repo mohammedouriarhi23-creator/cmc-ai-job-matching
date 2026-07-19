@@ -5,13 +5,19 @@ Git
 Python
 Node.js
 Docker Desktop
+
 1. Cloner le dépôt
 git clone https://github.com/mohammedouriarhi23-creator/cmc-ai-job-matching.git
+
 cd cmc-ai-job-matching
-2. Démarrer PostgreSQL
+
+3. Démarrer PostgreSQL
+4. 
 Ouvrir Docker Desktop puis :
 docker compose up -d postgres
-3. Installer le backend
+
+6. Installer le backend
+7. 
 cd backend
 py -m venv venv
 .\venv\Scripts\Activate.ps1
@@ -22,20 +28,23 @@ DATABASE_URL=postgresql+psycopg2://cmc_user:cmc_password@localhost:5432/cmc_conn
 SECRET_KEY=UNE_LONGUE_CLE_SECRETE
 GEMINI_API_KEY=
 La clé Gemini est facultative, mais nécessaire pour l’analyse IA des CV.
-4. Préparer et lancer l’API
+
+9. Préparer et lancer l’API
 alembic upgrade head
 python -m uvicorn app.main:app --reload
 API disponible sur :
 http://localhost:8000
 http://localhost:8000/docs
-5. Installer et lancer le frontend
+
+10. Installer et lancer le frontend
 Dans un deuxième terminal :
 cd C:\chemin\vers\cmc-ai-job-matching\frontend-mock
 npm install
 npm run dev
 Site disponible sur :
 http://localhost:5173
-6. Créer un administrateur
+
+11. Créer un administrateur
 Dans le dossier backend :
 .\venv\Scripts\python.exe scripts\create_admin.py
 Chaque personne aura sa propre base PostgreSQL, ses propres comptes et son propre fichier .env. Ces données ne sont pas récupérées depuis GitHub
