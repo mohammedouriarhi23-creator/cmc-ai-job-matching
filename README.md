@@ -1,687 +1,89 @@
-### Pour runner ce qui est pushé : 
-Prérequis
+Voici la partie corrigée, prête à copier-coller :
+
+````markdown
+## Pour lancer le projet après l’avoir récupéré depuis GitHub
+
+### Prérequis
+
 Installer :
-Git
-Python
-Node.js
-Docker Desktop
 
-1. Cloner le dépôt
+- Git ;
+- Python ;
+- Node.js ;
+- Docker Desktop.
+
+### 1. Cloner le dépôt
+
+```powershell
 git clone https://github.com/mohammedouriarhi23-creator/cmc-ai-job-matching.git
-
 cd cmc-ai-job-matching
+```
 
-3. Démarrer PostgreSQL
-4. 
-Ouvrir Docker Desktop puis :
+### 2. Démarrer PostgreSQL
+
+Ouvrir Docker Desktop, puis exécuter depuis la racine du projet :
+
+```powershell
 docker compose up -d postgres
+```
 
-6. Installer le backend
-7. 
+### 3. Installer le backend
+
+```powershell
 cd backend
 py -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
 Copy-Item .env.example .env
-Dans backend/.env, mettre notamment :
+```
+
+Dans `backend/.env`, renseigner notamment :
+
+```env
 DATABASE_URL=postgresql+psycopg2://cmc_user:cmc_password@localhost:5432/cmc_connect
 SECRET_KEY=UNE_LONGUE_CLE_SECRETE
 GEMINI_API_KEY=
-La clé Gemini est facultative, mais nécessaire pour l’analyse IA des CV.
+```
 
-9. Préparer et lancer l’API
-alembic upgrade head
-python -m uvicorn app.main:app --reload
-API disponible sur :
-http://localhost:8000
-http://localhost:8000/docs
+La clé Gemini est facultative, mais nécessaire pour utiliser l’analyse IA des CV.
 
-10. Installer et lancer le frontend
-Dans un deuxième terminal :
+### 4. Préparer et lancer l’API
+
+Toujours dans le dossier `backend` :
+
+```powershell
+.\venv\Scripts\alembic.exe upgrade head
+.\venv\Scripts\python.exe -m uvicorn app.main:app --reload
+```
+
+L’API sera disponible sur :
+
+- http://localhost:8000
+- http://localhost:8000/docs
+- http://localhost:8000/health
+
+### 5. Installer et lancer le frontend
+
+Ouvrir un deuxième terminal :
+
+```powershell
 cd C:\chemin\vers\cmc-ai-job-matching\frontend-mock
 npm install
 npm run dev
-Site disponible sur :
-http://localhost:5173
+```
 
-11. Créer un administrateur
-Dans le dossier backend :
+Le site sera disponible sur :
+
+- http://localhost:5173
+
+### 6. Créer un compte administrateur
+
+Depuis le dossier `backend` :
+
+```powershell
 .\venv\Scripts\python.exe scripts\create_admin.py
-Chaque personne aura sa propre base PostgreSQL, ses propres comptes et son propre fichier .env. Ces données ne sont pas récupérées depuis GitHub
-
-
-## Étapes de réalisation du projet
-
-### Étape 1 — Définition du besoin ✅
-
-Au début, le projet devait utiliser un dataset et entraîner un modèle de Machine Learning pour effectuer le matching.
-
-Après analyse, cette approche a été abandonnée, car nous ne disposons pas d’un dataset réel et suffisamment fiable.
-
-Le projet a donc été redéfini comme une plateforme de **matching intelligent et explicable**, sans entraînement d’un modèle sur un dataset.
-
-Le système compare directement :
-
-* le profil du candidat ;
-* les compétences du candidat ;
-* ses expériences et ses projets ;
-* ses préférences ;
-* les exigences de l’offre.
-
-Il produit ensuite un score de compatibilité accompagné d’une explication.
-
----
-
-### Étape 2 — Définition des utilisateurs ✅
-
-La plateforme contient deux espaces.
-
-#### Espace candidat
-
-Un candidat peut être :
-
-* `STAGIAIRE` : encore en formation au CMC ;
-* `LAUREAT` : ayant terminé sa formation.
-
-Les stagiaires et les lauréats utilisent le même espace candidat, mais leur type est enregistré dans leur profil.
-
-#### Espace administration CMC
-
-L’administration peut :
-
-* gérer les candidats ;
-* différencier les stagiaires et les lauréats ;
-* publier des offres ;
-* gérer les entreprises partenaires ;
-* consulter les candidatures ;
-* analyser les scores ;
-* sélectionner manuellement les candidats ;
-* consulter les statistiques.
-
-Il n’existe pas d’espace de connexion pour les entreprises. Les offres des entreprises partenaires sont gérées par l’administration du CMC.
-
----
-
-### Étape 3 — Définition du parcours candidat ✅
-
-Le parcours prévu est le suivant :
-
-```text
-Création du compte
-        ↓
-Choix : stagiaire ou lauréat
-        ↓
-Dépôt du CV
-        ↓
-Lecture du CV
-        ↓
-Analyse du CV par une IA
-        ↓
-Extraction des informations
-        ↓
-Vérification et correction par le candidat
-        ↓
-Formulaire complémentaire
-        ↓
-Profil complet
-        ↓
-Matching avec les offres
-        ↓
-Candidature
-        ↓
-Analyse par l’administration
 ```
 
-L’IA doit extraire principalement :
+Saisir ensuite l’adresse email et le mot de passe de l’administrateur.
 
-* le résumé professionnel ;
-* les compétences ;
-* les expériences ;
-* les projets ;
-* les formations ;
-* les langues ;
-* les certifications.
-
-L’IA doit comprendre les différentes façons de nommer les sections d’un CV.
-
-Par exemple :
-
-* Profil ;
-* À propos ;
-* Résumé professionnel ;
-* Professional Summary.
-
-Toutes ces sections doivent être transformées vers un même champ standard.
-
----
-
-### Étape 4 — Création du frontend ✅
-
-Le frontend a été créé par un membre de l’équipe et ajouté au dépôt GitHub.
-
-Il contient actuellement les interfaces principales :
-
-* espace candidat ;
-* espace administration ;
-* tableau de bord ;
-* gestion du profil ;
-* offres ;
-* candidatures ;
-* entreprises partenaires ;
-* analyse des candidats ;
-* statistiques.
-
-Les écrans d’authentification, de profil, de CV, d’entreprises partenaires, d’offres et de candidatures utilisent maintenant les vraies données du backend et de PostgreSQL.
-
-Certaines statistiques générales des tableaux de bord utilisent encore des valeurs de démonstration. Leur connexion complète est prévue à l’Étape 24.
-
-Le dossier du frontend est actuellement :
-
-```text
-frontend-mock/
-```
-
-Il pourra être renommé plus tard en :
-
-```text
-frontend/
-```
-
----
-
-### Étape 5 — Création du backend ✅
-
-Un backend a été créé avec FastAPI.
-
-Le backend a été ajouté dans le même dépôt, à côté du frontend.
-
-La structure actuelle est similaire à :
-
-```text
-cmc-ai-job-matching/
-├── frontend-mock/
-├── backend/
-├── docker-compose.yml
-└── .gitignore
-```
-
-Le backend contient les dossiers suivants :
-
-```text
-backend/app/
-├── core/
-├── models/
-├── routers/
-├── schemas/
-├── services/
-└── utils/
-```
-
-Chaque dossier possède un rôle précis :
-
-* `core` : configuration et connexion à la base ;
-* `models` : tables SQLAlchemy ;
-* `schemas` : validation des données avec Pydantic ;
-* `routers` : routes de l’API ;
-* `services` : logique métier ;
-* `utils` : fonctions générales.
-
----
-
-### Étape 6 — Configuration de PostgreSQL ✅
-
-PostgreSQL a été configuré avec Docker Compose.
-
-Le backend utilise une variable `DATABASE_URL` pour se connecter à la base de données.
-
-Le fichier local :
-
-```text
-backend/.env
-```
-
-contient les vraies informations de connexion et ne doit pas être envoyé sur GitHub.
-
-Le fichier :
-
-```text
-backend/.env.example
-```
-
-est ajouté au dépôt pour montrer aux autres membres de l’équipe les variables nécessaires.
-
-Une incompatibilité entre un ancien volume PostgreSQL 15 et PostgreSQL 16 a été détectée.
-
-L’ancien volume a été supprimé afin de recréer une base PostgreSQL 16 propre.
-
----
-
-### Étape 7 — Création des premiers modèles ✅
-
-Trois premiers modèles ont été développés.
-
-#### User
-
-Le modèle `User` contient :
-
-* l’email ;
-* le mot de passe chiffré ;
-* le rôle ;
-* l’état du compte ;
-* la date de création.
-
-Les rôles seront :
-
-* `ADMIN` ;
-* `CANDIDATE`.
-
-#### CandidateProfile
-
-Le modèle `CandidateProfile` contient :
-
-* le nom ;
-* le prénom ;
-* le téléphone ;
-* la ville ;
-* le résumé professionnel ;
-* le type du candidat ;
-* le statut du profil.
-
-Les types de candidats sont :
-
-* `STAGIAIRE` ;
-* `LAUREAT`.
-
-Les statuts du profil permettront de suivre son avancement :
-
-* nouveau ;
-* CV en cours d’analyse ;
-* CV en attente de confirmation ;
-* profil incomplet ;
-* profil complété.
-
-#### CvExtraction
-
-Le modèle `CvExtraction` a été créé pour pouvoir conserver :
-
-* le nom du CV ;
-* le chemin du fichier ;
-* le texte extrait ;
-* le résultat JSON produit par l’IA ;
-* le statut du traitement ;
-* les erreurs éventuelles ;
-* la date de confirmation.
-
-Dans l’implémentation actuelle, l’analyse Gemini reste sans état : le fichier et son résultat ne sont pas enregistrés dans cette table. Le candidat confirme directement les données dans le wizard, puis le profil validé est sauvegardé lors de l’Étape 16.
-
----
-
-### Étape 8 — Configuration d’Alembic ✅
-
-Alembic a été configuré pour gérer les modifications de la base de données.
-
-Une première migration a été générée afin de créer les tables :
-
-```text
-users
-candidate_profiles
-cv_extractions
-```
-
-Cette migration est présente dans :
-
-```text
-backend/alembic/versions/
-```
-
-Alembic permet à tous les membres de l’équipe de recréer la même structure de base de données.
-
----
-
-### Étape 9 — Intégration dans le dépôt GitHub ✅
-
-Le frontend créé par un membre de l’équipe était déjà présent dans le dépôt.
-
-Le backend développé séparément a ensuite été copié et ajouté dans ce même dépôt.
-
-Les fichiers suivants ont été ajoutés :
-
-* le backend FastAPI ;
-* les modèles SQLAlchemy ;
-* la configuration Alembic ;
-* la première migration ;
-* le fichier `requirements.txt` ;
-* le fichier `.env.example` ;
-* le fichier `docker-compose.yml` ;
-* le fichier `.gitignore`.
-
-Les fichiers suivants ne sont pas envoyés sur GitHub :
-
-* `backend/venv/` ;
-* `backend/.env` ;
-* `frontend-mock/node_modules/` ;
-* `backend/storage/candidate_documents/` ;
-* `backend/.pytest_cache/` ;
-* les fichiers temporaires Python.
-
----
-
-
-### Étape 10 — Vérifier et appliquer la première migration ✅
-
-Les vérifications suivantes ont été réalisées :
-
-* PostgreSQL fonctionne avec Docker Compose ;
-* le backend se connecte correctement à PostgreSQL ;
-* les migrations Alembic sont appliquées ;
-* les tables sont présentes ;
-* FastAPI démarre correctement ;
-* les routes `/` et `/health` répondent.
-
-Cette étape valide définitivement la base technique.
-
----
-
-### Étape 11 — Développer l’authentification ✅
-
-La vraie authentification est opérationnelle. Les mots de passe sont hachés, les sessions utilisent des tokens JWT et les rôles `CANDIDATE` et `ADMIN` sont séparés.
-
-Les fonctionnalités disponibles sont :
-
-* inscription d’un candidat avec création automatique de son `CandidateProfile` ;
-* connexion avec email et mot de passe ;
-* récupération de l’utilisateur connecté avec `GET /api/auth/me` ;
-* protections des routes selon le rôle ;
-* compte administrateur ;
-* restauration de la session après rechargement du frontend.
-
-Les parcours candidat et administrateur ont été validés par le test d’intégration.
-
----
-
-
-# Suite de la réalisation
-
-### Étape 12 — Connecter l'authentification au frontend ✅
-
-Les boutons et utilisateurs fictifs du frontend ont été remplacés par une vraie authentification :
-
-* vrai formulaire de connexion (`/connexion`) qui appelle `POST /api/auth/login` (OAuth2 form) ;
-* vraie inscription qui appelle `POST /api/auth/register` puis connecte automatiquement le candidat ;
-* token JWT stocké côté client, session restaurée au rechargement de page via `GET /api/auth/me` (avant, un simple F5 déconnectait l'utilisateur) ;
-* redirection selon le rôle réel renvoyé par le backend : candidat stagiaire → `/dashboard/stagiaire`, candidat lauréat → `/dashboard/laureat`, admin → `/admin` ;
-* pages protégées par rôle réel (`CANDIDATE`/`ADMIN`) au lieu d'un faux statut local ;
-* le faux statut "compte en attente de validation" a été retiré : le backend active les comptes immédiatement, il n'y a pas encore de workflow de validation admin (à décider plus tard si on en a besoin).
-
-**Changement de scope important par rapport au plan initial :** le formulaire d'inscription a été transformé en **wizard multi-étapes** (`FormWizard`, composant générique piloté par une config — `frontend-mock/src/data/wizard/stagiaireSteps.js` / `laureatSteps.js`) au lieu d'un simple formulaire une page. 6 étapes par profil (Identité, Formation, Stage recherché/Situation, Compétences, Parcours, Documents & Profil), avec stepper visuel, validation par étape, et sauvegarde en `localStorage` pour ne pas perdre la saisie au rechargement.
-
-Le wizard envoie désormais le profil complet au backend après la création du compte. Les mots de passe ne sont jamais conservés dans le brouillon local et les documents sont téléversés séparément dans le stockage privé.
-
----
-
-### Étape 13 — Développer le dépôt du CV ✅ (approche différente du plan initial)
-
-Le candidat peut déposer un CV (PDF, JPG ou PNG) directement à l'**étape 1** du wizard d'inscription, avant même la création du compte.
-
-La route d'analyse IA reste volontairement sans état : le fichier est lu en mémoire, envoyé à l'IA, puis oublié à la fin de cette requête. Après validation du wizard et création du compte, le CV et les autres justificatifs sélectionnés sont en revanche téléversés dans un stockage privé et référencés par la table `candidate_documents`.
-
-Validations faites côté backend avant tout traitement : format (PDF/JPG/PNG), taille (5 Mo max), nombre de pages PDF (10 max).
-
----
-
-### Étape 14 — Développer l'analyse IA du CV ✅ (Gemini au lieu du pipeline initialement prévu)
-
-Le fichier du CV est envoyé directement à **Google Gemini** (`gemini-2.5-flash`, encodage base64) plutôt que d'extraire le texte localement puis de l'envoyer à un modèle — cette approche permet aussi de traiter les CV scannés/images, pas seulement les PDF avec texte natif.
-
-L'IA renvoie une structure JSON qui reprend les mêmes noms de champs que le wizard (identité, formation, compétences techniques, langues, soft skills, expériences, projets, certifications, présentation), avec pour chaque champ une `value` et un niveau de confiance (`high`/`medium`/`low`), afin que le candidat sache quoi vérifier en priorité.
-
-Le statut `PENDING_CONFIRMATION` prévu initialement n'existe pas en base : comme le fichier n'est pas persisté (Étape 13), il n'y a rien à "confirmer" côté serveur — la confirmation se fait entièrement côté frontend (voir Étape 15).
-
-Route : `POST /api/cv/parse` (`backend/app/routers/cv.py`, `backend/app/services/cv_extraction_service.py`). Protections : timeout 60 s avec 1 nouvel essai si la réponse IA n'est pas un JSON valide, limite de 3 analyses par IP toutes les 10 minutes, aucun contenu de CV n'est jamais écrit dans les logs (RGPD). Si `GEMINI_API_KEY` n'est pas configurée, la route répond clairement (503) plutôt que de planter.
-
----
-
-### Étape 15 — Développer la validation du CV ✅ (côté frontend uniquement)
-
-Après extraction, une fenêtre de revue (`CvReviewModal`) affiche les informations détectées, groupées par section, avec un badge de confiance par champ.
-
-Le candidat peut :
-
-* accepter ou refuser chaque champ individuellement (case à cocher) ;
-* tout accepter ou tout ignorer en un clic ;
-* voir la liste des informations non détectées dans son CV.
-
-Règles d'injection respectées (`frontend-mock/src/data/wizard/cvToFormMapper.js`, testé unitairement) :
-
-* un champ déjà rempli manuellement n'est **jamais** écrasé automatiquement ;
-* les listes (compétences, langues, expériences...) sont fusionnées sans doublons (comparaison insensible à la casse et aux accents) ;
-* un badge "extrait du CV" reste affiché à côté d'un champ pré-rempli tant que le candidat ne l'a pas modifié lui-même.
-
-Cette validation se fait uniquement pendant l'inscription (avant la création du compte) — ce n'est pas un flux séparé consultable plus tard, contrairement à ce qui était envisagé au départ.
-
----
-
-### Étape 16 — Compléter les modèles du candidat ✅
-
-Le profil complet est sauvegardé à la fois en JSONB comme représentation canonique et dans des tables structurées pour les futures recherches et le matching : formation, compétences, langues, soft skills, expériences, projets, certifications et préférences.
-
-Les routes permettent de lire et modifier le profil, de mettre à jour ses informations principales et de gérer les documents privés (PDF/JPG/PNG, 5 Mo maximum, signature du contenu vérifiée). Le wizard React est connecté à ces routes. Un backfill idempotent (`python -m scripts.backfill_candidate_profiles`) synchronise les anciens profils JSONB ; les données existantes ont été migrées.
-
----
-
-### Étape 17 — Gestion des entreprises partenaires ✅
-
-L’administration peut enregistrer les entreprises partenaires du CMC.
-
-Chaque entreprise peut contenir :
-
-* un nom ;
-* un secteur ;
-* une ville ;
-* un email ;
-* un téléphone ;
-* un contact ;
-* un statut de partenariat.
-
-Les entreprises ne disposent pas d’un compte de connexion. Les modèles, la migration, les routes publiques et administratives ainsi que les écrans React de consultation et de gestion CRUD sont opérationnels.
-
----
-
-### Étape 18 — Gestion des offres CMC ✅
-
-L’administration peut créer et gérer les offres.
-
-Une offre contient :
-
-* un titre ;
-* une description ;
-* une entreprise ;
-* une localisation ;
-* un type de contrat ;
-* un public ciblé ;
-* des compétences obligatoires ;
-* des compétences souhaitées ;
-* un niveau de formation ;
-* une expérience demandée ;
-* une date limite ;
-* un statut.
-
-Le public ciblé peut être :
-
-* stagiaire ;
-* lauréat ;
-* les deux.
-
-Le backend et le frontend sont connectés : création, modification, publication, archivage, suppression protégée, filtres, pagination, dates limites et séparation des vues publiques/administratives sont pris en charge.
-
----
-
-### Étape 19 — Développer le moteur de matching ⏳ prochaine étape
-
-Le moteur de matching comparera les profils avec les offres.
-
-Il utilisera notamment :
-
-* les compétences obligatoires ;
-* les compétences souhaitées ;
-* le domaine ;
-* les expériences ;
-* les projets ;
-* la formation ;
-* la localisation ;
-* la disponibilité ;
-* les préférences ;
-* la similarité sémantique.
-
-Le résultat comprendra :
-
-* un score global ;
-* des sous-scores ;
-* les compétences correspondantes ;
-* les compétences manquantes ;
-* les points forts ;
-* les critères non satisfaits.
-
-Aucun dataset d’entraînement ne sera nécessaire.
-
----
-
-### Étape 20 — Développer les candidatures ✅
-
-Le candidat peut choisir une offre et postuler.
-
-Les statuts disponibles sont :
-
-* envoyée ;
-* en cours d’analyse ;
-* présélectionnée ;
-* entretien ;
-* acceptée ;
-* refusée ;
-* retirée.
-
-Le score ne déclenche jamais automatiquement une candidature ou une sélection. Un candidat au profil complet et possédant un vrai CV peut postuler, suivre ou retirer sa candidature puis repostuler. L'administration peut filtrer les candidatures, télécharger le CV protégé, ajouter une note et appliquer uniquement les transitions de statut autorisées. Les écrans candidat et administration utilisent les données réelles de l'API.
-
----
-
-### Étape 21 — Développer la revue administrative 🟡 partiellement réalisée
-
-Une première version de la revue administrative est déjà disponible. L’administration peut :
-
-* voir les candidats ayant postulé ;
-* filtrer les stagiaires et les lauréats ;
-* consulter leurs coordonnées et leur type de profil ;
-* télécharger leur CV de manière sécurisée ;
-* ajouter une note administrative ;
-* faire évoluer la candidature selon des transitions contrôlées ;
-* présélectionner, convoquer en entretien, accepter ou refuser.
-
-Il reste à connecter cette revue au moteur de matching afin de classer les candidats, afficher leur profil détaillé, expliquer leur score et présenter les compétences présentes ou manquantes.
-
-La décision finale restera humaine.
-
----
-
-### Étape 22 — Développer les notifications ⬜ à faire
-
-Le candidat recevra des notifications lors des changements importants :
-
-* candidature reçue ;
-* candidature en cours d’analyse ;
-* présélection ;
-* sélection ;
-* refus ;
-* nouvelle offre compatible.
-
-Les notifications pourront être envoyées :
-
-* dans la plateforme ;
-* par email.
-
----
-
-### Étape 23 — Ajouter les offres externes ⬜ à faire
-
-Lorsque les offres CMC fonctionneront correctement, un système de collecte d’offres externes sera ajouté.
-
-Les offres devront être :
-
-* récupérées ;
-* nettoyées ;
-* normalisées ;
-* vérifiées ;
-* dédupliquées ;
-* enregistrées avec la source `SCRAPING`.
-
-Elles utiliseront ensuite le même moteur de matching.
-
----
-
-### Étape 24 — Connecter les tableaux de bord 🟡 partiellement réalisée
-
-Les pages de profil, CV, entreprises, offres et candidatures sont déjà connectées aux vraies données PostgreSQL.
-
-Il reste à remplacer les statistiques générales encore fictives par des indicateurs calculés par le backend.
-
-L’administration pourra comparer :
-
-* stagiaires et lauréats ;
-* utilisateurs actifs ;
-* nombre de candidatures ;
-* taux de sélection ;
-* filières les plus actives ;
-* offres les plus consultées ;
-* compétences les plus demandées ;
-* compétences les plus manquantes ;
-* offres CMC et offres externes.
-
----
-
-### Étape 25 — Tests, sécurité et déploiement 🟡 partiellement réalisée
-
-Éléments déjà réalisés :
-
-* tests unitaires ;
-* tests d’intégration ;
-* vérification des rôles ;
-* sécurisation des mots de passe ;
-* sécurisation des CV ;
-* protection des données personnelles ;
-* validation du format, de la taille et de la signature des fichiers ;
-* reconstruction complète d’une base vide avec Alembic ;
-* lint et build de production du frontend ;
-* documentation de l’état du projet.
-
-Éléments restant à réaliser :
-
-* tests du moteur de matching ;
-* conteneurisation complète ;
-* intégration et déploiement continus ;
-* préparation du déploiement de production ;
-* documentation finale d’exploitation.
-
----
-
-## État actuel du projet
-
-Les étapes **1 à 18 sont terminées**. L’Étape **20 — Candidatures** est également terminée en avance.
-
-Nous sommes actuellement à l’**Étape 19 — Développer le moteur de matching**.
-
-Ordre de travail prévu :
-
-```text
-Étape 19 — Moteur de matching
-        ↓
-Étape 21 — Revue administrative complète
-        ↓
-Étape 22 — Notifications
-        ↓
-Étape 23 — Offres externes
-        ↓
-Étape 24 — Statistiques réelles
-        ↓
-Étape 25 — Finalisation, sécurité et déploiement
-```
-
-La prochaine tâche doit donc concerner uniquement le moteur de matching, sans commencer plusieurs étapes en parallèle.
+Chaque personne possède sa propre base PostgreSQL, ses propres comptes et son propre fichier `.env`. Ces données privées ne sont pas récupérées depuis GitHub.
+````
