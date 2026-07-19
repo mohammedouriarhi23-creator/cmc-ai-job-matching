@@ -1,6 +1,3 @@
-
-
-````markdown
 # CMC AI Job Matching
 
 Plateforme de matching intelligent et explicable entre les profils des candidats du CMC et les offres d’emploi ou de stage.
@@ -11,10 +8,10 @@ Plateforme de matching intelligent et explicable entre les profils des candidats
 
 Installer :
 
-- Git ;
-- Python ;
-- Node.js ;
-- Docker Desktop.
+- Git
+- Python
+- Node.js
+- Docker Desktop
 
 ### 1. Cloner le dépôt
 
@@ -105,11 +102,11 @@ Le projet a donc été redéfini comme une plateforme de **matching intelligent 
 
 Le système compare directement :
 
-- le profil du candidat ;
-- les compétences du candidat ;
-- ses expériences et ses projets ;
-- ses préférences ;
-- les exigences de l’offre.
+- le profil du candidat
+- les compétences du candidat
+- ses expériences et ses projets
+- ses préférences
+- les exigences de l’offre
 
 Il produit ensuite un score de compatibilité accompagné d’une explication.
 
@@ -123,8 +120,8 @@ La plateforme contient deux espaces.
 
 Un candidat peut être :
 
-- `STAGIAIRE` : encore en formation au CMC ;
-- `LAUREAT` : ayant terminé sa formation.
+- `STAGIAIRE` : encore en formation au CMC
+- `LAUREAT` : ayant terminé sa formation
 
 Les stagiaires et les lauréats utilisent le même espace candidat, mais leur type est enregistré dans leur profil.
 
@@ -132,14 +129,14 @@ Les stagiaires et les lauréats utilisent le même espace candidat, mais leur ty
 
 L’administration peut :
 
-- gérer les candidats ;
-- différencier les stagiaires et les lauréats ;
-- publier des offres ;
-- gérer les entreprises partenaires ;
-- consulter les candidatures ;
-- analyser les scores ;
-- sélectionner manuellement les candidats ;
-- consulter les statistiques.
+- gérer les candidats
+- différencier les stagiaires et les lauréats
+- publier des offres
+- gérer les entreprises partenaires
+- consulter les candidatures
+- analyser les scores
+- sélectionner manuellement les candidats
+- consulter les statistiques
 
 Il n’existe pas d’espace de connexion pour les entreprises. Les offres des entreprises partenaires sont gérées par l’administration du CMC.
 
@@ -177,22 +174,22 @@ Analyse par l’administration
 
 L’IA doit extraire principalement :
 
-- le résumé professionnel ;
-- les compétences ;
-- les expériences ;
-- les projets ;
-- les formations ;
-- les langues ;
-- les certifications.
+- le résumé professionnel
+- les compétences
+- les expériences
+- les projets
+- les formations
+- les langues
+- les certifications
 
 L’IA doit comprendre les différentes façons de nommer les sections d’un CV.
 
 Par exemple :
 
-- Profil ;
-- À propos ;
-- Résumé professionnel ;
-- Professional Summary.
+- Profil
+- À propos
+- Résumé professionnel
+- Professional Summary
 
 Toutes ces sections doivent être transformées vers un même champ standard.
 
@@ -204,15 +201,15 @@ Le frontend a été créé par un membre de l’équipe et ajouté au dépôt Gi
 
 Il contient actuellement les interfaces principales :
 
-- espace candidat ;
-- espace administration ;
-- tableau de bord ;
-- gestion du profil ;
-- offres ;
-- candidatures ;
-- entreprises partenaires ;
-- analyse des candidats ;
-- statistiques.
+- espace candidat
+- espace administration
+- tableau de bord
+- gestion du profil
+- offres
+- candidatures
+- entreprises partenaires
+- analyse des candidats
+- statistiques
 
 Les écrans d’authentification, de profil, de CV, d’entreprises partenaires, d’offres et de candidatures utilisent maintenant les vraies données du backend et de PostgreSQL.
 
@@ -262,12 +259,12 @@ backend/app/
 
 Chaque dossier possède un rôle précis :
 
-- `core` : configuration et connexion à la base ;
-- `models` : tables SQLAlchemy ;
-- `schemas` : validation des données avec Pydantic ;
-- `routers` : routes de l’API ;
-- `services` : logique métier ;
-- `utils` : fonctions générales.
+- `core` : configuration et connexion à la base
+- `models` : tables SQLAlchemy
+- `schemas` : validation des données avec Pydantic
+- `routers` : routes de l’API
+- `services` : logique métier
+- `utils` : fonctions générales
 
 ---
 
@@ -307,53 +304,53 @@ Trois premiers modèles ont été développés.
 
 Le modèle `User` contient :
 
-- l’email ;
-- le mot de passe chiffré ;
-- le rôle ;
-- l’état du compte ;
-- la date de création.
+- l’email
+- le mot de passe chiffré
+- le rôle
+- l’état du compte
+- la date de création
 
 Les rôles sont :
 
-- `ADMIN` ;
-- `CANDIDATE`.
+- `ADMIN`
+- `CANDIDATE`
 
 #### CandidateProfile
 
 Le modèle `CandidateProfile` contient :
 
-- le nom ;
-- le prénom ;
-- le téléphone ;
-- la ville ;
-- le résumé professionnel ;
-- le type du candidat ;
-- le statut du profil.
+- le nom
+- le prénom
+- le téléphone
+- la ville
+- le résumé professionnel
+- le type du candidat
+- le statut du profil
 
 Les types de candidats sont :
 
-- `STAGIAIRE` ;
-- `LAUREAT`.
+- `STAGIAIRE`
+- `LAUREAT`
 
 Les statuts du profil permettent de suivre son avancement :
 
-- nouveau ;
-- CV en cours d’analyse ;
-- CV en attente de confirmation ;
-- profil incomplet ;
-- profil complété.
+- nouveau
+- CV en cours d’analyse
+- CV en attente de confirmation
+- profil incomplet
+- profil complété
 
 #### CvExtraction
 
 Le modèle `CvExtraction` a été créé pour pouvoir conserver :
 
-- le nom du CV ;
-- le chemin du fichier ;
-- le texte extrait ;
-- le résultat JSON produit par l’IA ;
-- le statut du traitement ;
-- les erreurs éventuelles ;
-- la date de confirmation.
+- le nom du CV
+- le chemin du fichier
+- le texte extrait
+- le résultat JSON produit par l’IA
+- le statut du traitement
+- les erreurs éventuelles
+- la date de confirmation
 
 Dans l’implémentation actuelle, l’analyse Gemini reste sans état : le fichier et son résultat ne sont pas enregistrés dans cette table.
 
@@ -391,23 +388,23 @@ Le backend développé séparément a ensuite été copié et ajouté dans ce m�
 
 Les fichiers suivants ont été ajoutés :
 
-- le backend FastAPI ;
-- les modèles SQLAlchemy ;
-- la configuration Alembic ;
-- les migrations ;
-- le fichier `requirements.txt` ;
-- le fichier `.env.example` ;
-- le fichier `docker-compose.yml` ;
-- le fichier `.gitignore`.
+- le backend FastAPI
+- les modèles SQLAlchemy
+- la configuration Alembic
+- les migrations
+- le fichier `requirements.txt`
+- le fichier `.env.example`
+- le fichier `docker-compose.yml`
+- le fichier `.gitignore`
 
 Les fichiers suivants ne sont pas envoyés sur GitHub :
 
-- `backend/venv/` ;
-- `backend/.env` ;
-- `frontend-mock/node_modules/` ;
-- `backend/storage/candidate_documents/` ;
-- `backend/.pytest_cache/` ;
-- les fichiers temporaires Python.
+- `backend/venv/`
+- `backend/.env`
+- `frontend-mock/node_modules/`
+- `backend/storage/candidate_documents/`
+- `backend/.pytest_cache/`
+- les fichiers temporaires Python
 
 ---
 
@@ -415,12 +412,12 @@ Les fichiers suivants ne sont pas envoyés sur GitHub :
 
 Les vérifications suivantes ont été réalisées :
 
-- PostgreSQL fonctionne avec Docker Compose ;
-- le backend se connecte correctement à PostgreSQL ;
-- les migrations Alembic sont appliquées ;
-- les tables sont présentes ;
-- FastAPI démarre correctement ;
-- les routes `/` et `/health` répondent.
+- PostgreSQL fonctionne avec Docker Compose
+- le backend se connecte correctement à PostgreSQL
+- les migrations Alembic sont appliquées
+- les tables sont présentes
+- FastAPI démarre correctement
+- les routes `/` et `/health` répondent
 
 Cette étape valide définitivement la base technique.
 
@@ -434,12 +431,12 @@ Les mots de passe sont hachés, les sessions utilisent des tokens JWT et les rô
 
 Les fonctionnalités disponibles sont :
 
-- inscription d’un candidat avec création automatique de son `CandidateProfile` ;
-- connexion avec email et mot de passe ;
-- récupération de l’utilisateur connecté avec `GET /api/auth/me` ;
-- protection des routes selon le rôle ;
-- compte administrateur ;
-- restauration de la session après rechargement du frontend.
+- inscription d’un candidat avec création automatique de son `CandidateProfile`
+- connexion avec email et mot de passe
+- récupération de l’utilisateur connecté avec `GET /api/auth/me`
+- protection des routes selon le rôle
+- compte administrateur
+- restauration de la session après rechargement du frontend
 
 Les parcours candidat et administrateur ont été validés par le test d’intégration.
 
@@ -449,23 +446,23 @@ Les parcours candidat et administrateur ont été validés par le test d’inté
 
 Les boutons et utilisateurs fictifs du frontend ont été remplacés par une vraie authentification :
 
-- formulaire de connexion qui appelle `POST /api/auth/login` ;
-- inscription qui appelle `POST /api/auth/register` ;
-- connexion automatique après l’inscription ;
-- session restaurée avec `GET /api/auth/me` ;
-- redirection selon le rôle ;
-- pages protégées pour les candidats et les administrateurs.
+- formulaire de connexion qui appelle `POST /api/auth/login`
+- inscription qui appelle `POST /api/auth/register`
+- connexion automatique après l’inscription
+- session restaurée avec `GET /api/auth/me`
+- redirection selon le rôle
+- pages protégées pour les candidats et les administrateurs
 
 Le formulaire d’inscription a été transformé en wizard multi-étapes.
 
 Il contient six étapes par profil :
 
-- identité ;
-- formation ;
-- stage recherché ou situation actuelle ;
-- compétences ;
-- parcours ;
-- documents et profil.
+- identité
+- formation
+- stage recherché ou situation actuelle
+- compétences
+- parcours
+- documents et profil
 
 Le wizard sauvegarde un brouillon dans `localStorage`.
 
@@ -481,18 +478,18 @@ Le candidat peut déposer un CV PDF, JPG ou PNG directement dans le wizard d’i
 
 La route d’analyse IA reste volontairement sans état :
 
-- le fichier est lu en mémoire ;
-- il est envoyé à l’IA ;
-- il est supprimé de la mémoire à la fin de la requête.
+- le fichier est lu en mémoire
+- il est envoyé à l’IA
+- il est supprimé de la mémoire à la fin de la requête
 
 Après la validation du wizard et la création du compte, le CV est téléversé dans un stockage privé et référencé par la table `candidate_documents`.
 
 Les validations comprennent :
 
-- formats PDF, JPG et PNG ;
-- taille maximale de 5 Mo ;
-- maximum de 10 pages pour un PDF ;
-- vérification de la signature réelle du fichier.
+- formats PDF, JPG et PNG
+- taille maximale de 5 Mo
+- maximum de 10 pages pour un PDF
+- vérification de la signature réelle du fichier
 
 ---
 
@@ -502,28 +499,28 @@ Le fichier du CV est envoyé directement à Google Gemini avec le modèle config
 
 Cette approche permet de traiter :
 
-- les PDF contenant du texte ;
-- les PDF scannés ;
-- les images JPG ;
-- les images PNG.
+- les PDF contenant du texte
+- les PDF scannés
+- les images JPG
+- les images PNG
 
 L’IA renvoie une structure JSON contenant notamment :
 
-- l’identité ;
-- la formation ;
-- les compétences techniques ;
-- les langues ;
-- les soft skills ;
-- les expériences ;
-- les projets ;
-- les certifications ;
-- la présentation.
+- l’identité
+- la formation
+- les compétences techniques
+- les langues
+- les soft skills
+- les expériences
+- les projets
+- les certifications
+- la présentation
 
 Chaque donnée possède un niveau de confiance :
 
-- `high` ;
-- `medium` ;
-- `low`.
+- `high`
+- `medium`
+- `low`
 
 La route utilisée est :
 
@@ -533,11 +530,11 @@ POST /api/cv/parse
 
 Les protections comprennent :
 
-- délai maximal de traitement ;
-- nouvel essai si la réponse IA est invalide ;
-- limitation du nombre d’analyses par adresse IP ;
-- absence de contenu personnel dans les logs ;
-- erreur claire si `GEMINI_API_KEY` n’est pas configurée.
+- délai maximal de traitement
+- nouvel essai si la réponse IA est invalide
+- limitation du nombre d’analyses par adresse IP
+- absence de contenu personnel dans les logs
+- erreur claire si `GEMINI_API_KEY` n’est pas configurée
 
 ---
 
@@ -547,17 +544,17 @@ Après l’extraction, une fenêtre de revue affiche les informations détectée
 
 Le candidat peut :
 
-- accepter ou refuser chaque champ ;
-- tout accepter ;
-- tout ignorer ;
-- voir les informations non détectées.
+- accepter ou refuser chaque champ
+- tout accepter
+- tout ignorer
+- voir les informations non détectées
 
 Les règles suivantes sont appliquées :
 
-- une valeur saisie manuellement n’est jamais écrasée automatiquement ;
-- les listes sont fusionnées sans doublons ;
-- les comparaisons ignorent la casse et les accents ;
-- un badge indique les champs extraits du CV.
+- une valeur saisie manuellement n’est jamais écrasée automatiquement
+- les listes sont fusionnées sans doublons
+- les comparaisons ignorent la casse et les accents
+- un badge indique les champs extraits du CV
 
 Cette validation se déroule pendant l’inscription.
 
@@ -567,31 +564,31 @@ Cette validation se déroule pendant l’inscription.
 
 Le profil complet est sauvegardé de deux manières :
 
-- en JSONB comme représentation complète du wizard ;
-- dans des tables structurées utilisables par le futur moteur de matching.
+- en JSONB comme représentation complète du wizard
+- dans des tables structurées utilisables par le futur moteur de matching
 
 Les données structurées comprennent :
 
-- la formation ;
-- les compétences techniques ;
-- les langues ;
-- les soft skills ;
-- les expériences ;
-- les projets ;
-- les certifications ;
-- les préférences ;
-- les disponibilités ;
-- la mobilité ;
-- les documents.
+- la formation
+- les compétences techniques
+- les langues
+- les soft skills
+- les expériences
+- les projets
+- les certifications
+- les préférences
+- les disponibilités
+- la mobilité
+- les documents
 
 Les routes permettent :
 
-- de récupérer le profil complet ;
-- de modifier le profil ;
-- de mettre à jour les informations principales ;
-- de téléverser un document ;
-- de télécharger un document ;
-- de supprimer un document.
+- de récupérer le profil complet
+- de modifier le profil
+- de mettre à jour les informations principales
+- de téléverser un document
+- de télécharger un document
+- de supprimer un document
 
 Un script idempotent permet de synchroniser les anciens profils JSONB :
 
@@ -609,33 +606,33 @@ L’administration peut enregistrer et gérer les entreprises partenaires du CMC
 
 Chaque entreprise peut contenir :
 
-- un nom ;
-- un secteur ;
-- une ville ;
-- un email ;
-- un téléphone ;
-- un contact ;
-- un site internet ;
-- une description ;
-- un statut de partenariat.
+- un nom
+- un secteur
+- une ville
+- un email
+- un téléphone
+- un contact
+- un site internet
+- une description
+- un statut de partenariat
 
 Les statuts disponibles sont :
 
-- `PENDING` ;
-- `ACTIVE` ;
-- `INACTIVE`.
+- `PENDING`
+- `ACTIVE`
+- `INACTIVE`
 
 Les entreprises ne disposent pas d’un compte de connexion.
 
 Les fonctionnalités disponibles sont :
 
-- création ;
-- consultation ;
-- modification ;
-- suppression protégée ;
-- filtrage ;
-- pagination ;
-- affichage public des entreprises actives.
+- création
+- consultation
+- modification
+- suppression protégée
+- filtrage
+- pagination
+- affichage public des entreprises actives
 
 Le backend et les écrans React sont connectés.
 
@@ -647,47 +644,47 @@ L’administration peut créer et gérer les offres.
 
 Une offre contient :
 
-- un titre ;
-- une description ;
-- une entreprise ;
-- un secteur ;
-- une localisation ;
-- un type de contrat ;
-- un public ciblé ;
-- des compétences obligatoires ;
-- des compétences souhaitées ;
-- un niveau de formation ;
-- une expérience demandée ;
-- une date limite ;
-- un mode de travail ;
-- un nombre de postes ;
-- un statut.
+- un titre
+- une description
+- une entreprise
+- un secteur
+- une localisation
+- un type de contrat
+- un public ciblé
+- des compétences obligatoires
+- des compétences souhaitées
+- un niveau de formation
+- une expérience demandée
+- une date limite
+- un mode de travail
+- un nombre de postes
+- un statut
 
 Le public ciblé peut être :
 
-- `STAGIAIRE` ;
-- `LAUREAT` ;
-- `BOTH`.
+- `STAGIAIRE`
+- `LAUREAT`
+- `BOTH`
 
 Les modes de travail sont :
 
-- `ONSITE` ;
-- `REMOTE` ;
-- `HYBRID`.
+- `ONSITE`
+- `REMOTE`
+- `HYBRID`
 
 Les fonctionnalités disponibles sont :
 
-- création ;
-- modification ;
-- publication ;
-- archivage ;
-- suppression protégée ;
-- filtres ;
-- pagination ;
-- contrôle des dates limites ;
-- affichage public ;
-- affichage administratif ;
-- recherche adaptée au type du candidat.
+- création
+- modification
+- publication
+- archivage
+- suppression protégée
+- filtres
+- pagination
+- contrôle des dates limites
+- affichage public
+- affichage administratif
+- recherche adaptée au type du candidat
 
 Le backend et le frontend sont connectés.
 
@@ -699,26 +696,26 @@ Le moteur de matching comparera les profils avec les offres.
 
 Il utilisera notamment :
 
-- les compétences obligatoires ;
-- les compétences souhaitées ;
-- le domaine ;
-- les expériences ;
-- les projets ;
-- la formation ;
-- la localisation ;
-- la disponibilité ;
-- les préférences ;
-- la similarité sémantique.
+- les compétences obligatoires
+- les compétences souhaitées
+- le domaine
+- les expériences
+- les projets
+- la formation
+- la localisation
+- la disponibilité
+- les préférences
+- la similarité sémantique
 
 Le résultat comprendra :
 
-- un score global ;
-- des sous-scores ;
-- les compétences correspondantes ;
-- les compétences manquantes ;
-- les points forts ;
-- les critères non satisfaits ;
-- une explication compréhensible.
+- un score global
+- des sous-scores
+- les compétences correspondantes
+- les compétences manquantes
+- les points forts
+- les critères non satisfaits
+- une explication compréhensible
 
 Aucun dataset d’entraînement ne sera nécessaire.
 
@@ -730,37 +727,37 @@ Le candidat peut sélectionner une offre et postuler.
 
 Pour postuler, il doit :
 
-- être connecté comme candidat ;
-- posséder un profil complet ;
-- posséder un véritable CV enregistré ;
-- correspondre au public ciblé par l’offre ;
-- respecter la date limite.
+- être connecté comme candidat
+- posséder un profil complet
+- posséder un véritable CV enregistré
+- correspondre au public ciblé par l’offre
+- respecter la date limite
 
 Les statuts disponibles sont :
 
-- `SUBMITTED` ;
-- `UNDER_REVIEW` ;
-- `SHORTLISTED` ;
-- `INTERVIEW` ;
-- `ACCEPTED` ;
-- `REJECTED` ;
-- `WITHDRAWN`.
+- `SUBMITTED`
+- `UNDER_REVIEW`
+- `SHORTLISTED`
+- `INTERVIEW`
+- `ACCEPTED`
+- `REJECTED`
+- `WITHDRAWN`
 
 Le candidat peut :
 
-- postuler ;
-- suivre ses candidatures ;
-- consulter le détail ;
-- retirer une candidature ;
-- postuler à nouveau après un retrait.
+- postuler
+- suivre ses candidatures
+- consulter le détail
+- retirer une candidature
+- postuler à nouveau après un retrait
 
 L’administration peut :
 
-- consulter les candidatures ;
-- filtrer les candidatures ;
-- télécharger le CV protégé ;
-- ajouter une note ;
-- modifier le statut selon les transitions autorisées.
+- consulter les candidatures
+- filtrer les candidatures
+- télécharger le CV protégé
+- ajouter une note
+- modifier le statut selon les transitions autorisées
 
 Une note administrative n’est jamais affichée au candidat.
 
@@ -774,26 +771,26 @@ Une première version de la revue administrative est disponible.
 
 L’administration peut déjà :
 
-- voir les candidats ayant postulé ;
-- filtrer les stagiaires et les lauréats ;
-- consulter leurs coordonnées ;
-- voir leur type de profil ;
-- télécharger leur CV ;
-- ajouter une note administrative ;
-- modifier leur statut ;
-- présélectionner un candidat ;
-- convoquer un candidat en entretien ;
-- accepter ou refuser une candidature.
+- voir les candidats ayant postulé
+- filtrer les stagiaires et les lauréats
+- consulter leurs coordonnées
+- voir leur type de profil
+- télécharger leur CV
+- ajouter une note administrative
+- modifier leur statut
+- présélectionner un candidat
+- convoquer un candidat en entretien
+- accepter ou refuser une candidature
 
 Il reste à connecter la revue au moteur de matching afin de :
 
-- classer les candidats ;
-- consulter leur profil structuré complet ;
-- afficher leur score ;
-- expliquer le score ;
-- montrer les compétences présentes ;
-- montrer les compétences manquantes ;
-- comparer les candidats.
+- classer les candidats
+- consulter leur profil structuré complet
+- afficher leur score
+- expliquer le score
+- montrer les compétences présentes
+- montrer les compétences manquantes
+- comparer les candidats
 
 La décision finale restera humaine.
 
@@ -803,18 +800,18 @@ La décision finale restera humaine.
 
 Le candidat recevra des notifications lors des changements importants :
 
-- candidature reçue ;
-- candidature en cours d’analyse ;
-- présélection ;
-- entretien ;
-- sélection ;
-- refus ;
-- nouvelle offre compatible.
+- candidature reçue
+- candidature en cours d’analyse
+- présélection
+- entretien
+- sélection
+- refus
+- nouvelle offre compatible
 
 Les notifications pourront être envoyées :
 
-- dans la plateforme ;
-- par email.
+- dans la plateforme
+- par email
 
 ---
 
@@ -824,12 +821,12 @@ Lorsque les offres CMC et le moteur de matching fonctionneront correctement, un 
 
 Les offres devront être :
 
-- récupérées ;
-- nettoyées ;
-- normalisées ;
-- vérifiées ;
-- dédupliquées ;
-- enregistrées avec la source `SCRAPING`.
+- récupérées
+- nettoyées
+- normalisées
+- vérifiées
+- dédupliquées
+- enregistrées avec la source `SCRAPING`
 
 Elles utiliseront ensuite le même moteur de matching.
 
@@ -839,29 +836,29 @@ Elles utiliseront ensuite le même moteur de matching.
 
 Les pages suivantes utilisent déjà les vraies données PostgreSQL :
 
-- profil candidat ;
-- CV ;
-- entreprises ;
-- offres ;
-- candidatures ;
-- administration des entreprises ;
-- administration des offres ;
-- administration des candidatures.
+- profil candidat
+- CV
+- entreprises
+- offres
+- candidatures
+- administration des entreprises
+- administration des offres
+- administration des candidatures
 
 Il reste à remplacer les statistiques générales encore fictives par des indicateurs calculés par le backend.
 
 L’administration pourra notamment consulter :
 
-- le nombre de stagiaires ;
-- le nombre de lauréats ;
-- les utilisateurs actifs ;
-- le nombre de candidatures ;
-- le taux de sélection ;
-- les filières les plus actives ;
-- les offres les plus consultées ;
-- les compétences les plus demandées ;
-- les compétences les plus manquantes ;
-- les offres CMC et externes.
+- le nombre de stagiaires
+- le nombre de lauréats
+- les utilisateurs actifs
+- le nombre de candidatures
+- le taux de sélection
+- les filières les plus actives
+- les offres les plus consultées
+- les compétences les plus demandées
+- les compétences les plus manquantes
+- les offres CMC et externes
 
 ---
 
@@ -869,34 +866,34 @@ L’administration pourra notamment consulter :
 
 #### Éléments déjà réalisés
 
-- tests unitaires frontend ;
-- test d’intégration backend ;
-- vérification des rôles ;
-- sécurisation des mots de passe ;
-- absence des mots de passe dans les brouillons locaux ;
-- sécurisation des CV ;
-- stockage privé des documents ;
-- protection des données personnelles ;
-- validation du format des fichiers ;
-- validation de la taille des fichiers ;
-- validation de la signature des fichiers ;
-- reconstruction complète d’une base vide avec Alembic ;
-- vérification du schéma Alembic ;
-- vérification des dépendances Python ;
-- lint du frontend ;
-- tests du frontend ;
-- build de production React ;
-- documentation de l’état du projet.
+- tests unitaires frontend
+- test d’intégration backend
+- vérification des rôles
+- sécurisation des mots de passe
+- absence des mots de passe dans les brouillons locaux
+- sécurisation des CV
+- stockage privé des documents
+- protection des données personnelles
+- validation du format des fichiers
+- validation de la taille des fichiers
+- validation de la signature des fichiers
+- reconstruction complète d’une base vide avec Alembic
+- vérification du schéma Alembic
+- vérification des dépendances Python
+- lint du frontend
+- tests du frontend
+- build de production React
+- documentation de l’état du projet
 
 #### Éléments restant à réaliser
 
-- tests du moteur de matching ;
-- tests supplémentaires de l’ensemble du projet ;
-- conteneurisation complète du backend et du frontend ;
-- intégration continue ;
-- déploiement continu ;
-- préparation de l’environnement de production ;
-- documentation finale d’exploitation.
+- tests du moteur de matching
+- tests supplémentaires de l’ensemble du projet
+- conteneurisation complète du backend et du frontend
+- intégration continue
+- déploiement continu
+- préparation de l’environnement de production
+- documentation finale d’exploitation
 
 ---
 
@@ -925,4 +922,3 @@ Ordre de travail prévu :
 ```
 
 La prochaine tâche doit donc concerner uniquement le moteur de matching, sans commencer plusieurs étapes en parallèle.
-````
